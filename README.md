@@ -10,6 +10,7 @@ Bash [script](/release) for automating releases. Uses [git-cliff](https://github
 - Suggests a version number using git-cliff
 - Updates the CHANGELOG.md file
 - Creates a signed and annotated git tag
+- Supports custom pre-release and post-release hooks
 
 > [!IMPORTANT]
 > This script performs a signed tag operation (`git tag -s`). Ensure you have a [GPG key set up](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key) for signing.
@@ -27,6 +28,25 @@ bash release [version_tag]
 If you don't provide a version tag, the script will suggest one based on git-cliff's output.
 
 This script works best when you ensure your commit messages follow the [Conventional Commits](https://www.conventionalcommits.org) format. Check out my tool [git-sumi](https://github.com/welpo/git-sumi) to enforce this format on your projects.
+
+## 🪝 Hooks
+
+The script supports custom hooks for project-specific release tasks. Create executable files in a `.release-hooks` directory in your project root:
+
+- `pre-release`: First thing that runs after verifying script is ready to go
+- `post-release`: Runs after creating the release tag
+
+Hooks receive the version tag (e.g., "v1.2.3") as their first argument. Example of a bash pre-release hook:
+
+```bash
+# .release-hooks/pre-release
+#!/usr/bin/env bash
+
+VERSION_TAG="$1"
+poetry version "${VERSION_TAG#v}"  # Update version in pyproject.toml
+```
+
+Hooks can be in any language as long as they are executable (`chmod +x` required).
 
 ## 👥 Contributing
 
