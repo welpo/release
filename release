@@ -92,6 +92,7 @@ execute_hook "pre-release"
 git cliff --tag "$VERSION_TAG" -o CHANGELOG.md
 # Add links to (real) GitHub users.
 sed -E 's/@([a-zA-Z0-9_-]+)(?!\[bot\])/[@\1](https:\/\/github.com\/\1)/g' CHANGELOG.md > CHANGELOG.tmp && mv CHANGELOG.tmp CHANGELOG.md
+rm -f CHANGELOG.tmp 2>/dev/null || true
 
 # Add all changes and commit.
 git add -A
