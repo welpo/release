@@ -91,7 +91,7 @@ execute_hook "pre-release"
 # Update CHANGELOG.
 git cliff --tag "$VERSION_TAG" -o CHANGELOG.md
 # Add links to (real) GitHub users.
-perl -pe 's/@([a-zA-Z0-9_-]+)(?!\[bot\])/[@$1](https:\/\/github.com\/$1)/g' CHANGELOG.md > CHANGELOG.tmp && mv CHANGELOG.tmp CHANGELOG.md
+perl -pe 's/(?<!\w)@([A-Za-z0-9_-]+)(?=\b)(?!\Q[bot]\E)/[\@$1](https:\/\/github.com\/$1)/g' CHANGELOG.md > CHANGELOG.tmp && mv CHANGELOG.tmp CHANGELOG.md
 rm -f CHANGELOG.tmp 2>/dev/null || true
 
 # Add all changes and commit.
